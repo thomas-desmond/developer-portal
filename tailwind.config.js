@@ -111,6 +111,7 @@ module.exports = {
   variants: {
     extend: {
       translate: ['focus', 'group-hover', 'group-focus'],
+      maxHeight: ['focus-visible'],
     },
   },
   plugins: [require('@tailwindcss/aspect-ratio'), require('@tailwindcss/typography')],

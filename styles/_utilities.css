@@ -23,6 +23,13 @@
   }
 
   /**
+   * Utility to force inset focus rings when necessary
+   */
+  .focus-ring-inset {
+    outline-offset: -4px;
+  }
+
+  /**
    * Gutters
    */
   .px-gutter-all {

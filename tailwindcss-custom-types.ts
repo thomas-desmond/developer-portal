@@ -9,13 +9,16 @@ type SCDPTailwindTypes =
   | 'heading-sm'
   | 'heading-xs'
   | 'scroll-to-offset'
+  | 'focus-ring-inset'
   | NavTWClasses
   | InPageNavTWClasses
   // @TODO - some transform utilities that are enabled by default
   // aren't being added to the classname gen. Why?
+  // Apparenlty also mqprefix:focus:foo classes.
   | 'transform-none'
   | 'lg:transform-none'
   | 'lg:translate-none'
+  | 'lg:focus-visible:max-h-full'
   // These are not yet supported by tailwindcss-classnames
   // even though they are official plugins
   | 'aspect-w-3'

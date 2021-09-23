@@ -1,7 +1,8 @@
 // Global
-import FocusTrap from 'focus-trap-react';
-import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
+import FocusTrap from 'focus-trap-react';
+import { useId } from 'react-id-generator';
 import { classnames } from 'tailwindcss-classnames';
 // Data
 import { NavigationData } from '@/data/data-navigation';
@@ -21,14 +22,43 @@ type NavMenuProps = NavigationData & {
  * The menus themselves.
  */
 const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): JSX.Element => {
+  /**
+   *  React hook for unique IDs using react-unique-id.
+   *  Avoid generating new ID on every rerender.
+   */
+  const [idSeed] = useId(1, 'scdp-nav-menu');
+  const navMenuId = idSeed;
+  const navMenuToggleId = `${idSeed}--toggle`;
+  const navMenuOverlayId = `${idSeed}--overlay`;
+  const navMenuCloseId = `${idSeed}--close`;
+  /**
+   *  React hooks for handling open/close states.
+   */
   const navItemRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState(false);
+  // Toggle the parent nav's callback and open state.
   const toggleNavItem = (event: React.MouseEvent) => {
     if (callback && (event?.target as HTMLButtonElement)?.localName !== 'button') {
       callback();
     }
     setOpen(!isOpen);
   };
+  // Close on click outside of menu.
+  useEffect(() => {
+    const pageClickEvent = (event: Event) => {
+      if (navItemRef.current !== null && !navItemRef?.current?.contains(event.target as Node)) {
+        setOpen(!isOpen);
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('click', pageClickEvent);
+    }
+
+    return () => {
+      window.removeEventListener('click', pageClickEvent);
+    };
+  }, [isOpen]);
 
   const mainNavItemStyles = classnames(
     'nav-item--button',
@@ -58,17 +88,26 @@ const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): 
   const navItemOverlayActiveClasses = classnames('translate-x-0', 'shadow-inner');
 
   return (
-    <FocusTrap
-      active={isOpen}
-      focusTrapOptions={{
-        clickOutsideDeactivates: true,
-        onDeactivate: () => setOpen(false),
-      }}
+    <ConditionalWrapper
+      condition={!!children}
+      wrapper={(children) => (
+        <FocusTrap
+          active={isOpen}
+          focusTrapOptions={{
+            clickOutsideDeactivates: false,
+            onDeactivate: () => setOpen(false),
+            allowOutsideClick: true,
+            initialFocus: children ? `#${navMenuCloseId}` : false,
+          }}
+        >
+          {children}
+        </FocusTrap>
+      )}
     >
-      <div>
+      <div id={navMenuId}>
         {/* 
-        Main Nav Item
-      */}
+          Main Nav Item
+        */}
         <ConditionalWrapper
           condition={!!url}
           wrapper={(children) => (
@@ -79,10 +118,14 @@ const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): 
         >
           <DynamicTag
             tag={children ? 'button' : 'a'}
+            id={navMenuToggleId}
             className={classnames(mainNavItemStyles, {
               [buttonActiveClasses]: children && isOpen,
               ['lg:pr-5']: !!children,
             })}
+            aria-haspopup={children ? true : undefined}
+            tabIndex={children ? (isOpen ? -1 : undefined) : undefined}
+            aria-controls={children ? navMenuOverlayId : undefined}
             onClick={toggleNavItem}
           >
             <span className={classnames('inline-flex', 'items-center', 'pointer-events-none')}>
@@ -148,11 +191,14 @@ const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): 
           </DynamicTag>
         </ConditionalWrapper>
         {/* 
-        Nav Item Overlay
-      */}
+          Nav Item Overlay
+        */}
         {children && (
           <div
             ref={navItemRef}
+            id={navMenuOverlayId}
+            aria-hidden={isOpen}
+            aria-label={`${title} submenu`}
             className={classnames(
               'fixed',
               'top-32',
@@ -181,6 +227,7 @@ const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): 
               Back Button
             */}
             <button
+              id={navMenuCloseId}
               className={classnames(
                 'font-semibold',
                 'text-left',
@@ -188,18 +235,27 @@ const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): 
                 'pr-4',
                 'pl-10',
                 'h-14',
+                'block',
                 'w-full',
                 'group',
                 'bg-teal',
                 'text-white',
-                'lg:hidden',
+                // 'lg:hidden',
                 'transform-gpu',
                 'transition-colors',
-                'hover:bg-teal-dark'
+                'hover:bg-teal-dark',
+                'focus-ring-inset',
+                'lg:max-w-screen-lg',
+                'mx-auto',
+                'lg:opacity-0',
+                'lg:max-h-0',
+                'focus:opacity-100',
+                'lg:focus-visible:max-h-full'
               )}
               onClick={toggleNavItem}
             >
-              Back
+              <span className={classnames('lg:sr-only')}>Back</span>
+              <span className={classnames('sr-only', 'lg:not-sr-only')}>Close submenu</span>
               <span
                 className={classnames(
                   'absolute',
@@ -219,7 +275,8 @@ const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): 
                     'top-5',
                     'transition-transform',
                     'transform-gpu',
-                    'group-hover:-translate-x-1'
+                    'group-hover:-translate-x-1',
+                    'lg:rotate-90'
                   )}
                 />
               </span>
@@ -266,7 +323,7 @@ const NavMenu = ({ title, url, children, buttonIcon, callback }: NavMenuProps): 
           </div>
         )}
       </div>
-    </FocusTrap>
+    </ConditionalWrapper>
   );
 };
 

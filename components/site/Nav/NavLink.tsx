@@ -20,25 +20,25 @@ const Level2Classes = classnames('text-xs');
  */
 const NavLink = ({ text, url, level, onClick }: NavLinkProps): JSX.Element => {
   return (
-    <ConditionalWrapper
-      condition={!!url}
-      wrapper={(children) => (
-        <Link href={url as string}>
-          <a className={classnames('inline-block', 'hover:underline')} onClick={onClick}>
-            {children}
-          </a>
-        </Link>
-      )}
+    <span
+      className={classnames('block', {
+        [Level1Classes]: level === 1,
+        [Level2Classes]: level !== 1,
+      })}
     >
-      <span
-        className={classnames('block', {
-          [Level1Classes]: level === 1,
-          [Level2Classes]: level !== 1,
-        })}
+      <ConditionalWrapper
+        condition={!!url}
+        wrapper={(children) => (
+          <Link href={url as string}>
+            <a className={classnames('hover:underline')} onClick={onClick}>
+              {children}
+            </a>
+          </Link>
+        )}
       >
-        {text}
-      </span>
-    </ConditionalWrapper>
+        <>{text}</>
+      </ConditionalWrapper>
+    </span>
   );
 };
 
