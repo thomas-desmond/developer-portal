@@ -140,6 +140,9 @@ module.exports = {
                 padding: '1.25em',
               },
             },
+            pre: {
+              backgroundColor: theme('colors.theme-bg-alt'),
+            },
           },
         },
       }),
