@@ -119,7 +119,7 @@ const Nav = (): JSX.Element => {
     // Change height utility to `h-32` to the header.
     //
     // Necesarry to retain the space for the fixed header.
-    <header className={classnames('h-16')}>
+    <header className={classnames('h-32')}>
       {/*
         // @TODO: Adding search back
         // Change height utility to `h-32` to the containing div.
@@ -134,7 +134,7 @@ const Nav = (): JSX.Element => {
           'fixed',
           'inset-x-0',
           'top-0',
-          'h-16',
+          'h-32',
           'transition-all',
           {
             '-top-16': scrolled, // Note: absolute is being used here to avoid "transform" resetting the coordinate system for the children that are relying on the document's coordinates.
@@ -208,7 +208,7 @@ const Nav = (): JSX.Element => {
             className={classnames(
               'fixed',
               'bg-theme-bg',
-              'top-16',
+              'top-32',
               'bottom-0',
               'inset-0',
               'items-center',
@@ -324,11 +324,11 @@ const Nav = (): JSX.Element => {
           // @TODO: Adding search back
           // Uncomment the div containing search here.
         */}
-        {/* <div>
+        <div>
           <div className={classnames('px-gutter-all', 'py-2.5', 'max-w-screen-xl', 'm-auto')}>
             <SearchBox />
           </div>
-        </div> */}
+        </div>
       </div>
     </header>
   );
