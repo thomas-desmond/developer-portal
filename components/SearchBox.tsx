@@ -2,6 +2,7 @@ import Head from 'next/head'
 
 const SearchBox = (): JSX.Element => {
 
+
   return (
     <>
       <Head>
@@ -18,17 +19,16 @@ const SearchBox = (): JSX.Element => {
                 "xx6ca1b643-89fd-40f5-b02b-86943626079e"
               );       
               var root = document.getElementById("searchBox");
-              Coveo.initSearchbox(root, "https://cms.sitecore.com/search");
+              Coveo.initSearchbox(root, "https://www.sitecore.com/search");
             });
                         `,
           }}
         />
       </Head>
 
-      <div className="coveo-search-section bg-red">
+      <div className="coveo-search-section">
         <div className="CoveoAnalytics" data-search-hub="devPortalSearch"></div>
-        <div id="searchBox" className="CoveoSearchbox">
-        </div>
+        <div id="searchBox" className="CoveoSearchbox"></div>
       </div>
     </>
   );
