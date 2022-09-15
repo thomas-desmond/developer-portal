@@ -2,10 +2,6 @@
   "name": "dev_portal",
   "version": "1.1.0",
   "private": true,
-  "engines": {
-    "node": ">=14.0.0 <15.0.0",
-    "npm": ">=7.0.0"
-  },
   "lint-staged": {
     "**/*.{js,jsx,json}": [
       "eslint . --fix",
@@ -34,6 +30,7 @@
     "@remark-embedder/transformer-oembed": "^3.0.0",
     "@types/lodash.throttle": "^4.1.7",
     "axios": "^0.27.2",
+    "cookies-next": "^2.1.1",
     "clsx": "^1.2.1",
     "gray-matter": "^4.0.3",
     "hast": "^1.0.0",

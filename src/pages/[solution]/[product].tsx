@@ -5,6 +5,7 @@ import { getProductPaths } from '@/src/common/static-paths';
 import type { PageInfo, PartialData } from '@/src/interfaces/page-info';
 // Components
 import GenericContentPage from '@/src/layouts/GenericContentPage';
+import { setCookie } from 'cookies-next';
 
 export async function getStaticPaths() {
   const productPaths = await getProductPaths();
@@ -34,5 +35,9 @@ export default function productPage({
   pageInfo: PageInfo;
   partials: PartialData;
 }) {
+  if(pageInfo.title == "Headless Services"){
+    console.log("hi");
+    setCookie('visitedHeadless', true);
+  }
   return <GenericContentPage pageInfo={pageInfo} partials={partials} />;
 }
