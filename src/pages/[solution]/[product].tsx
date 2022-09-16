@@ -35,8 +35,6 @@ export default function productPage({
   pageInfo: PageInfo;
   partials: PartialData;
 }) {
-  if(pageInfo.title == "Headless Services"){
-    setCookie('visitedHeadless', true);
-  }
+  setCookie("RecentlyVisited", pageInfo.title);
   return <GenericContentPage pageInfo={pageInfo} partials={partials} />;
 }

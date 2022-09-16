@@ -4,11 +4,12 @@ import type { NextRequest } from 'next/server'
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  const val = request.cookies.get("visitedHeadless");
-  console.log("VBEEP BOOP", request.url);
-  if(val && !request.url.includes('headlessHomepage')) {
-    console.log("redirect");
-    return NextResponse.redirect(new URL('/personalized/headlessHomepage', request.url))
+  const val = request.cookies.get("RecentlyVisited");
+  if(val == 'Headless Services' && !request.url.includes('headlessHomepage')) {
+    return NextResponse.rewrite(new URL('/personalized/headlessHomepage', request.url))
+  }
+  else if(val == 'Moosend' && !request.url.includes('moosendHomepage')) {
+    return NextResponse.rewrite(new URL('/personalized/moosendHomepage', request.url))
   }
   return;
 
