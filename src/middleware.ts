@@ -11,6 +11,9 @@ export function middleware(request: NextRequest) {
   else if(val == 'Moosend' && !request.url.includes('moosendHomepage')) {
     return NextResponse.rewrite(new URL('/personalized/moosendHomepage', request.url))
   }
+  else if(val == 'Sitecore CDP' && !request.url.includes('cdpHomepage')) {
+    return NextResponse.rewrite(new URL('/personalized/cdpHomepage', request.url))
+  }
   return;
 
 }
